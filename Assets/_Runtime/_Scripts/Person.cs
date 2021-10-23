@@ -9,6 +9,7 @@ public class Person : MonoBehaviour
     public Vector3 translateDirection;
     private bool isMasked;
     private bool isInfected;
+    private bool isVaccinated;
     private Type personType;
     private float infectionProbability;
     private PointBoard pointBoard;
@@ -32,30 +33,35 @@ public class Person : MonoBehaviour
             case Type.FULLLY_VACCINATED:
                 isMasked = true;
                 isInfected = false;
+                isVaccinated = true;
                 infectionProbability = 0;
                 break;
 
             case Type.UNVACCINATED_WITH_MASK:
                 isMasked = true;
                 isInfected = false;
+                isVaccinated = false;
                 infectionProbability = 0.2f;
                 break;
 
             case Type.UNVACCINATED_WITHOUT_MASK:
                 isMasked = false;
                 isInfected = false;
+                isVaccinated = false;
                 infectionProbability = 0.8f;
                 break;
 
             case Type.HIGHLY_SUSCEPTIBLE_INFLECTED:
                 isMasked = true;
                 isInfected = false;
+                isVaccinated = false;
                 infectionProbability = 1.0f;
                 break;
 
             case Type.INFLECTED:
                 isMasked = true;
                 isInfected = true;
+                isVaccinated = false;
                 infectionProbability = 1.0f;
                 break;
         }
@@ -154,24 +160,38 @@ public class Person : MonoBehaviour
         }
     }
 
-    public void WearMask()
-    {
-        personType = Type.UNVACCINATED_WITH_MASK;
-        isMasked = true;
-    }
-
     public bool GetIsMasked()
     {
         return isMasked;
     }
-    
+
+    public void SetIsMasked(bool isMasked)
+    {
+        this.isMasked = isMasked;
+    }
+
     public Type GetPersonType()
     {
         return personType;
     }
-  
+
     public bool GetIsInfected()
     {
         return isInfected;
+    }
+
+    public bool GetIsVaccinated()
+    {
+        return isVaccinated;
+    }
+
+    public void SetIsVaccinated(bool isVaccinated)
+    {
+        this.isVaccinated = isVaccinated;
+    }
+
+    public void SetPersonType(Type personType)
+    {
+        this.personType = personType;
     }
 }

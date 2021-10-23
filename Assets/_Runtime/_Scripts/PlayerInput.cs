@@ -61,13 +61,13 @@ public class PlayerInput : MonoBehaviour
             int count = 0;
             foreach (var person in people)
             {
-                if (person.GetPersonType() == Person.Type.UNVACCINATED_WITHOUT_MASK)
+                if (!person.GetIsMasked())
                 {
                     float distance = (transform.position - person.transform.position).sqrMagnitude;
                     if (distance < 5)
                     {
                         count++;
-                        person.WearMask();
+                        person.SetIsMasked(true);
                         pointBoard.Increment(1);
                     }
 
@@ -89,6 +89,29 @@ public class PlayerInput : MonoBehaviour
                 {
                     infectable.SetIsInfected(false);
                     pointBoard.Increment(1);
+                }
+            }
+        }
+
+        if (Input.GetButtonDown("Vaccinate"))
+        {
+            Person[] people = Resources.FindObjectsOfTypeAll(typeof(Person)) as Person[];
+            foreach (var person in people)
+            {
+                float distance = (transform.position - person.transform.position).sqrMagnitude;
+                if (distance < 5 && !person.GetIsVaccinated() && person.GetPersonType() != Person.Type.INFLECTED)
+                {
+                    if (person.GetPersonType() == Person.Type.HIGHLY_SUSCEPTIBLE_INFLECTED)
+                    {
+                        pointBoard.Increment(2);
+                    }
+                    else
+                    {
+                        pointBoard.Increment(1);
+                    }
+
+                    person.SetIsVaccinated(true);
+                    person.SetPersonType(Person.Type.FULLLY_VACCINATED);
                 }
             }
         }
