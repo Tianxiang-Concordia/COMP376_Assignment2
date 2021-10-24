@@ -14,6 +14,7 @@ public class Person : MonoBehaviour
     private float infectionProbability;
     private PointBoard pointBoard;
     private Sign sign;
+    private float speed;
 
     public enum Type
     {
@@ -26,6 +27,7 @@ public class Person : MonoBehaviour
 
     public Person()
     {
+        speed = 1;
         Random random = new Random();
         personType = (Type) random.Next(0, 5);
         switch (personType)
@@ -88,7 +90,7 @@ public class Person : MonoBehaviour
         sign.SetSprite(personType);
 
         // Update position
-        transform.Translate(translateDirection * Time.deltaTime);
+        transform.Translate(translateDirection * Time.deltaTime * speed);
 
         // change the direction if the character touches the boundary. 
         if (transform.position.x > GameManager.mBoundaryX || transform.position.x < -GameManager.mBoundaryX
@@ -128,21 +130,39 @@ public class Person : MonoBehaviour
     {
         if (col.tag.Equals("Person"))
         {
-            print("touched!");
             translateDirection = -translateDirection;
 
-            // @TODO: check the type of the person
+            if (col.GetComponent<Person>().isInfected)
+            {
+                Random random = new Random();
+                double randomDouble = random.NextDouble();
+                print(randomDouble + " " + infectionProbability);
+                if (randomDouble < infectionProbability)
+                {
+                    if (personType == Type.HIGHLY_SUSCEPTIBLE_INFLECTED)
+                    {
+                        // Dead
+                        Destroy(gameObject);
+                        pointBoard.Decrement(2);
+                        return;
+                    }
+
+                    pointBoard.Decrement(1);
+                    isInfected = true;
+                    personType = Type.INFLECTED;
+                }
+            }
         }
         else if (col.tag.Equals("Infectable"))
         {
             translateDirection = -translateDirection;
             Infectable infectable = col.GetComponent<Infectable>();
-            if (infectable != null) return;
+            if (infectable == null) return;
             if (infectable.GetIsInfected())
             {
-                // TODO: calculate the probility
                 Random random = new Random();
                 double randomDouble = random.NextDouble();
+                print(randomDouble + " " + infectionProbability);
                 if (randomDouble < infectionProbability)
                 {
                     if (personType == Type.HIGHLY_SUSCEPTIBLE_INFLECTED)

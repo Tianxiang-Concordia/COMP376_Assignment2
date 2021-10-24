@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
+using Random = System.Random;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -28,8 +30,16 @@ public class PlayerInput : MonoBehaviour
         Vector3 direction = new Vector3(horizontal, vertical, 0.0f);
         direction = direction.normalized;
 
-        // Translate the gameobject
-        transform.position += direction * speed * Time.deltaTime;
+        // Translate the game object
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.position += direction * speed * 2 * Time.deltaTime;
+        }
+        else
+        {
+            transform.position += direction * speed * Time.deltaTime;
+        }
+
 
         // Rotate the sprite
         if (direction != Vector3.zero)
@@ -89,6 +99,7 @@ public class PlayerInput : MonoBehaviour
                 {
                     infectable.SetIsInfected(false);
                     pointBoard.Increment(1);
+                    break;
                 }
             }
         }
@@ -112,13 +123,24 @@ public class PlayerInput : MonoBehaviour
 
                     person.SetIsVaccinated(true);
                     person.SetPersonType(Person.Type.FULLLY_VACCINATED);
+                    break;
                 }
             }
         }
-    }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        print("hello:" + col.name);
+        if (Input.GetButtonDown("Isolation"))
+        {
+            Person[] people = Resources.FindObjectsOfTypeAll(typeof(Person)) as Person[];
+            foreach (var person in people)
+            {
+                float distance = (transform.position - person.transform.position).sqrMagnitude;
+                if (distance < 5 && person.GetPersonType() == Person.Type.INFLECTED)
+                {
+                    Destroy(person.gameObject);
+                    pointBoard.Increment(1);
+                    break;
+                }
+            }
+        }
     }
 }

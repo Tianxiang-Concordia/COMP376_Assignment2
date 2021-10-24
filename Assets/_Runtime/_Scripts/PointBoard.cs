@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PointBoard : MonoBehaviour
 {
     private int point;
-    
+
     public PointBoard()
     {
         point = 0;
@@ -26,5 +26,10 @@ public class PointBoard : MonoBehaviour
     private void Update()
     {
         GetComponent<Text>().text = point.ToString();
+    }
+
+    public int GetPoint()
+    {
+        return point;
     }
 }
