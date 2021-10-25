@@ -132,11 +132,10 @@ public class Person : MonoBehaviour
         {
             translateDirection = -translateDirection;
 
-            if (col.GetComponent<Person>().isInfected)
+            if (col.GetComponent<Person>().isInfected && !isInfected)
             {
                 Random random = new Random();
                 double randomDouble = random.NextDouble();
-                print(randomDouble + " " + infectionProbability);
                 if (randomDouble < infectionProbability)
                 {
                     if (personType == Type.HIGHLY_SUSCEPTIBLE_INFLECTED)

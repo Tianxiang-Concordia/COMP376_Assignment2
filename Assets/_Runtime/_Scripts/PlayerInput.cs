@@ -12,6 +12,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private Sprite upSprite;
     [SerializeField] private Sprite rightSprite;
 
+    [SerializeField] private AudioSource punchAudio;
     private SpriteRenderer spriteRenderer;
     private PointBoard pointBoard;
 
@@ -140,6 +141,26 @@ public class PlayerInput : MonoBehaviour
                     pointBoard.Increment(1);
                     break;
                 }
+            }
+        }
+
+        if (Input.GetButtonDown("Drive Away"))
+        {
+            Person[] people = Resources.FindObjectsOfTypeAll(typeof(Person)) as Person[];
+            int count = 0;
+            foreach (var person in people)
+            {
+                float distance = (transform.position - person.transform.position).sqrMagnitude;
+                if (distance < 5)
+                {
+                    person.translateDirection = -person.translateDirection;
+                    count++;
+                }
+            }
+
+            if (count >= 3)
+            {
+                pointBoard.Increment(1);
             }
         }
     }
