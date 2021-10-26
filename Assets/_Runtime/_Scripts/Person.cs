@@ -11,10 +11,12 @@ public class Person : MonoBehaviour
     private bool isInfected;
     private bool isVaccinated;
     private Type personType;
-    private float infectionProbability;
+    private readonly float infectionProbability;
     private PointBoard pointBoard;
     private Sign sign;
     private float speed;
+
+    public static float DefaultSpeed = 1.0f;
 
     public enum Type
     {
@@ -27,8 +29,10 @@ public class Person : MonoBehaviour
 
     public Person()
     {
-        speed = 1;
-        Random random = new Random();
+        speed = DefaultSpeed;
+        byte[] buffer = Guid.NewGuid().ToByteArray();
+        int iSeed = BitConverter.ToInt32(buffer, 0);
+        Random random = new Random(iSeed);
         personType = (Type) random.Next(0, 5);
         switch (personType)
         {
@@ -120,7 +124,9 @@ public class Person : MonoBehaviour
 
     void ChangeDirection()
     {
-        Random random = new Random();
+        byte[] buffer = Guid.NewGuid().ToByteArray();
+        int iSeed = BitConverter.ToInt32(buffer, 0);
+        Random random = new Random(iSeed);
         float x = (float) random.Next(-10, 9) / 10;
         float y = (float) random.Next(-10, 9) / 10;
         translateDirection = new Vector3(x, y, 0).normalized;
@@ -212,5 +218,10 @@ public class Person : MonoBehaviour
     public void SetPersonType(Type personType)
     {
         this.personType = personType;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        this.speed = speed;
     }
 }

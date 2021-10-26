@@ -2,8 +2,6 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UIElements;
-using Random = System.Random;
 
 public class PlayerInput : MonoBehaviour
 {
@@ -12,7 +10,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private Sprite upSprite;
     [SerializeField] private Sprite rightSprite;
 
-    [SerializeField] private AudioSource punchAudio;
+    private AudioSource punchAudio;
     private SpriteRenderer spriteRenderer;
     private PointBoard pointBoard;
 
@@ -20,6 +18,7 @@ public class PlayerInput : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         pointBoard = FindObjectOfType<PointBoard>();
+        punchAudio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -138,6 +137,7 @@ public class PlayerInput : MonoBehaviour
                 if (distance < 5 && person.GetPersonType() == Person.Type.INFLECTED)
                 {
                     Destroy(person.gameObject);
+                    punchAudio.Play();
                     pointBoard.Increment(1);
                     break;
                 }
