@@ -11,6 +11,8 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private Sprite rightSprite;
 
     private AudioSource punchAudio;
+    private AudioSource vaccinateAudio;
+    private AudioSource successAudio;
     private SpriteRenderer spriteRenderer;
     private PointBoard pointBoard;
 
@@ -18,7 +20,10 @@ public class PlayerInput : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         pointBoard = FindObjectOfType<PointBoard>();
-        punchAudio = GetComponent<AudioSource>();
+        var audioSources = GetComponents<AudioSource>();
+        punchAudio = audioSources[0];
+        vaccinateAudio = audioSources[1];
+        successAudio = audioSources[2];
     }
 
     private void Update()
@@ -85,6 +90,7 @@ public class PlayerInput : MonoBehaviour
                     {
                         pointBoard.Increment(2);
                     }
+                    successAudio.Play();
                 }
             }
         }
@@ -99,6 +105,7 @@ public class PlayerInput : MonoBehaviour
                 {
                     infectable.SetIsInfected(false);
                     pointBoard.Increment(1);
+                    successAudio.Play();
                     break;
                 }
             }
@@ -120,7 +127,7 @@ public class PlayerInput : MonoBehaviour
                     {
                         pointBoard.Increment(1);
                     }
-
+                    vaccinateAudio.Play();
                     person.SetIsVaccinated(true);
                     person.SetPersonType(Person.Type.FULLLY_VACCINATED);
                     break;
