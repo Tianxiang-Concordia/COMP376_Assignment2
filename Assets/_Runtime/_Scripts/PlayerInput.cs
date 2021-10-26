@@ -69,7 +69,6 @@ public class PlayerInput : MonoBehaviour
             }
         }
 
-
         if (Input.GetButtonDown("Give Mask"))
         {
             Person[] people = Resources.FindObjectsOfTypeAll(typeof(Person)) as Person[];
@@ -79,7 +78,7 @@ public class PlayerInput : MonoBehaviour
                 if (!person.GetIsMasked())
                 {
                     float distance = (transform.position - person.transform.position).sqrMagnitude;
-                    if (distance < 5)
+                    if (distance < 12)
                     {
                         count++;
                         person.SetIsMasked(true);
@@ -90,6 +89,7 @@ public class PlayerInput : MonoBehaviour
                     {
                         pointBoard.Increment(2);
                     }
+
                     successAudio.Play();
                 }
             }
@@ -101,7 +101,7 @@ public class PlayerInput : MonoBehaviour
             foreach (var infectable in infectables)
             {
                 float distance = (transform.position - infectable.transform.position).sqrMagnitude;
-                if (distance < 5)
+                if (distance < 15)
                 {
                     infectable.SetIsInfected(false);
                     pointBoard.Increment(1);
@@ -117,7 +117,7 @@ public class PlayerInput : MonoBehaviour
             foreach (var person in people)
             {
                 float distance = (transform.position - person.transform.position).sqrMagnitude;
-                if (distance < 5 && !person.GetIsVaccinated() && person.GetPersonType() != Person.Type.INFLECTED)
+                if (distance < 12 && !person.GetIsVaccinated() && person.GetPersonType() != Person.Type.INFLECTED)
                 {
                     if (person.GetPersonType() == Person.Type.HIGHLY_SUSCEPTIBLE_INFLECTED)
                     {
@@ -127,6 +127,7 @@ public class PlayerInput : MonoBehaviour
                     {
                         pointBoard.Increment(1);
                     }
+
                     vaccinateAudio.Play();
                     person.SetIsVaccinated(true);
                     person.SetPersonType(Person.Type.FULLLY_VACCINATED);
@@ -141,7 +142,7 @@ public class PlayerInput : MonoBehaviour
             foreach (var person in people)
             {
                 float distance = (transform.position - person.transform.position).sqrMagnitude;
-                if (distance < 5 && person.GetPersonType() == Person.Type.INFLECTED)
+                if (distance < 10 && person.GetPersonType() == Person.Type.INFLECTED)
                 {
                     Destroy(person.gameObject);
                     punchAudio.Play();
@@ -158,9 +159,10 @@ public class PlayerInput : MonoBehaviour
             foreach (var person in people)
             {
                 float distance = (transform.position - person.transform.position).sqrMagnitude;
-                if (distance < 5)
+                if (distance < 30)
                 {
-                    person.translateDirection = -person.translateDirection;
+                    var directionVector = -(person.transform.position - transform.position).normalized;
+                    person.translateDirection = -directionVector;
                     count++;
                 }
             }

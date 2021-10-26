@@ -96,14 +96,14 @@ public class Person : MonoBehaviour
         // Update position
         transform.Translate(translateDirection * Time.deltaTime * speed);
 
-        // change the direction if the character touches the boundary. 
-        if (transform.position.x > GameManager.mBoundaryX || transform.position.x < -GameManager.mBoundaryX
-                                                          || transform.position.y > GameManager.mBoundaryY
-                                                          || transform.position.y < -GameManager.mBoundaryY
-        )
-        {
-            translateDirection = -translateDirection;
-        }
+        // // change the direction if the character touches the boundary. 
+        // if (transform.position.x > GameManager.mBoundaryX || transform.position.x < -GameManager.mBoundaryX
+        //                                                   || transform.position.y > GameManager.mBoundaryY
+        //                                                   || transform.position.y < -GameManager.mBoundaryY
+        // )
+        // {
+        //     translateDirection = -translateDirection;
+        // }
 
         // Flip the sprite
         if (translateDirection != Vector3.zero)
@@ -134,6 +134,7 @@ public class Person : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
+
         if (col.tag.Equals("Person"))
         {
             translateDirection = -translateDirection;
@@ -148,7 +149,7 @@ public class Person : MonoBehaviour
                     {
                         // Dead
                         Destroy(gameObject);
-                        pointBoard.Decrement(2);
+                        pointBoard.Decrement(1);
                         return;
                     }
 
@@ -167,7 +168,6 @@ public class Person : MonoBehaviour
             {
                 Random random = new Random();
                 double randomDouble = random.NextDouble();
-                print(randomDouble + " " + infectionProbability);
                 if (randomDouble < infectionProbability)
                 {
                     if (personType == Type.HIGHLY_SUSCEPTIBLE_INFLECTED)

@@ -8,11 +8,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject mPersonPrefab;
     public static int mBoundaryX = 19;
     public static int mBoundaryY = 7;
+    public GameObject gameOverObject;
 
     void Start()
     {
         InvokeRepeating(nameof(InstantiateObject), 0, 5);
         InvokeRepeating(nameof(GenerateMob), 8, 15);
+        InvokeRepeating(nameof(UpdateLevel), 15, 15);
     }
 
     void InstantiateObject()
@@ -25,16 +27,14 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (FindObjectOfType<PointBoard>().GetPoint() < -20)
+        if (FindObjectOfType<PointBoard>().GetPoint() <= -20)
         {
-            // print(GameObject.FindGameObjectWithTag("GameOver"));
-            // GameObject.Find("GameOver").SetActive(true);
+            gameOverObject.SetActive(true);
             Time.timeScale = 0;
         }
 
         if (Input.GetButtonDown("SwitchMode"))
         {
-            print("nimasile");
             GenerateMob();
             Person.DefaultSpeed = 0.2f;
             Person[] people = Resources.FindObjectsOfTypeAll(typeof(Person)) as Person[];
@@ -67,5 +67,10 @@ public class GameManager : MonoBehaviour
         {
             person.SetSpeed(1.0f);
         }
+    }
+
+    void UpdateLevel()
+    {
+        Person.DefaultSpeed += 0.1f;
     }
 }
