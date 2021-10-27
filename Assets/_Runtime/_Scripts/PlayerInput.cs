@@ -101,12 +101,15 @@ public class PlayerInput : MonoBehaviour
             foreach (var infectable in infectables)
             {
                 float distance = (transform.position - infectable.transform.position).sqrMagnitude;
-                if (distance < 15)
+                if (distance < 16)
                 {
-                    infectable.SetIsInfected(false);
-                    pointBoard.Increment(1);
-                    successAudio.Play();
-                    break;
+                    if (infectable.GetIsInfected())
+                    {
+                        infectable.SetIsInfected(false);
+                        pointBoard.Increment(1);
+                        successAudio.Play();
+                        break;
+                    }
                 }
             }
         }
