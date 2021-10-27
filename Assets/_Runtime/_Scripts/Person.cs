@@ -15,6 +15,7 @@ public class Person : MonoBehaviour
     private PointBoard pointBoard;
     private Sign sign;
     private float speed;
+    private bool canBeInfected;
 
     public static float DefaultSpeed = 1.0f;
 
@@ -30,6 +31,7 @@ public class Person : MonoBehaviour
     public Person()
     {
         speed = DefaultSpeed;
+        canBeInfected = false;
         byte[] buffer = Guid.NewGuid().ToByteArray();
         int iSeed = BitConverter.ToInt32(buffer, 0);
         Random random = new Random(iSeed);
@@ -85,6 +87,12 @@ public class Person : MonoBehaviour
     {
         ChangeDirection();
         InvokeRepeating(nameof(ChangeDirection), 5, 5);
+        Invoke(nameof(ChangeCanInfected), 3);
+    }
+
+    void ChangeCanInfected()
+    {
+        canBeInfected = true;
     }
 
     // Update is called once per frame
@@ -134,7 +142,7 @@ public class Person : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-
+        if (!canBeInfected) return;
         if (col.tag.Equals("Person"))
         {
             translateDirection = -translateDirection;
